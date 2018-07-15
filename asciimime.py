@@ -6,13 +6,22 @@ of a user.
 """
 from textblob import TextBlob
 
+def text_to_emoticon(txt):
+    """
+    Convert a given text to an (hopefully)
+    appropriate emoticon.
 
+    :param txt: text to evaluate
+    :type txt: str
+    :returns: str (may be empty)
+    """
+    data = TextBlob(txt)
 
-data = TextBlob("great fun :)")
+    # polarity: [-1.0, 1.0] -> :( .. :)
+    if data.sentiment.polarity > 0.2:
+        return ":)"
 
-# polarity: [-1.0, 1.0] -> :( .. :)
-if data.sentiment.polarity > 0.2:
-    print(":)")
-if data.sentiment.polarity < -0.2:
-    print(":)")
-# subjectivity: [0.0, 1.0] objective .. subjective
+    if data.sentiment.polarity < -0.2:
+        return ":)"
+    # subjectivity: [0.0, 1.0] objective .. subjective
+    return ""
