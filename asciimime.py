@@ -5,6 +5,7 @@ a mime and mirrors the (sentiment of the) toots
 of a user.
 """
 import argparse
+from bs4 import BeautifulSoup
 from mastodon import Mastodon, MastodonIllegalArgumentError
 from textblob import TextBlob
 
@@ -67,4 +68,6 @@ if __name__ == "__main__":
     except MastodonIllegalArgumentError:
         print("given username and/or password are invalid")
     for toot in mastodon.timeline('home'):
-        print("{0} (id: {1})".format(toot['content'],toot['id']))
+        soup = BeautifulSoup(toot['content'], 'html.parser')
+        txt = soup.text
+        print("{0} (id: {1})".format(txt, toot['id']))
