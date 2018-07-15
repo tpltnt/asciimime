@@ -5,7 +5,7 @@ a mime and mirrors the (sentiment of the) toots
 of a user.
 """
 import argparse
-from mastodon import Mastodon
+from mastodon import Mastodon, MastodonIllegalArgumentError
 from textblob import TextBlob
 
 def text_to_emoticon(txt):
@@ -47,6 +47,7 @@ if __name__ == "__main__":
     PARSER = argparse.ArgumentParser(description='A mastodon bot')
     PARSER.add_argument('--username', type=str, help='user name to use')
     PARSER.add_argument('--password', type=str, help='password to use')
+    PARSER.add_argument('--atoken', type=str, help='access token to use')
     PARSER.add_argument('--register', action='store_true',
                         help='register the app (only run once)')
     ARGS = PARSER.parse_args()
@@ -55,5 +56,13 @@ if __name__ == "__main__":
         register_app()
         exit(0)
 
-    acess_token = Mastodon.log_in(username=ARGS.username,
-                                  password=ARGS.password)
+    mastodon = Mastodon(
+        access_token=ARGS.atoken,
+        api_base_url='https://botsin.space'
+    )
+    try:
+        acess_token = mastodon.log_in(username=ARGS.username,
+                                      password=ARGS.password,
+                                      scopes=['read', 'write'])
+    except MastodonIllegalArgumentError:
+        print("given username and/or password are invalid")
