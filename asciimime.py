@@ -66,3 +66,5 @@ if __name__ == "__main__":
                                       scopes=['read', 'write'])
     except MastodonIllegalArgumentError:
         print("given username and/or password are invalid")
+    for toot in mastodon.timeline('home'):
+        print("{0} (id: {1})".format(toot['content'],toot['id']))
