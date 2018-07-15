@@ -18,10 +18,11 @@ def text_to_emoticon(txt):
     data = TextBlob(txt)
 
     # polarity: [-1.0, 1.0] -> :( .. :)
+    if data.sentiment.polarity < -0.2:
+        return ":("
+
     if data.sentiment.polarity > 0.2:
         return ":)"
 
-    if data.sentiment.polarity < -0.2:
-        return ":)"
     # subjectivity: [0.0, 1.0] objective .. subjective
     return ""
