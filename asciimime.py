@@ -75,6 +75,12 @@ if __name__ == "__main__":
     for toot in mastodon.timeline('home'):
         soup = BeautifulSoup(toot['content'], 'html.parser')
         txt = soup.text.replace('&apos;', "'")
-        print("{0} (id: {1})".format(txt, toot['id']))
-        print(" -> {0}".format(text_to_emoticon(txt)))
-        print("")
+        mime_reply = text_to_emoticon(txt)
+        if not mime_reply:
+            continue
+        if ':(' != mime_reply:
+            tid = toot['id']  # toot id
+            print("{0} (id: {1})".format(txt, tid))
+            print(" -> {0}".format(mime_reply))
+            print("")
+            mastodon.status_post(mime_reply, in_reply_to_id=tid)
