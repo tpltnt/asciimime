@@ -21,6 +21,11 @@ class TestTextToEmoticon(unittest.TestCase):
         res = text_to_emoticon("this is bad!")
         self.assertEqual(res, ':(')
 
+    def test_neutral(self):
+        """generic neutral example"""
+        res = text_to_emoticon("And we're back!")
+        self.assertEqual(res, ':|')
+
 
 if __name__ == '__main__':
     unittest.main()

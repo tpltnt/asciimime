@@ -24,10 +24,15 @@ def text_to_emoticon(txt):
     if data.sentiment.polarity < -0.2:
         return ":("
 
+    if data.sentiment.polarity == 0.0 and data.sentiment.subjectivity == 0:
+        return ":|"
+
     if data.sentiment.polarity > 0.2:
         return ":)"
 
     # subjectivity: [0.0, 1.0] objective .. subjective
+    #print(data.sentiment.polarity)
+    #print(data.sentiment.subjectivity)
     return ""
 
 
