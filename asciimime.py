@@ -69,5 +69,7 @@ if __name__ == "__main__":
         print("given username and/or password are invalid")
     for toot in mastodon.timeline('home'):
         soup = BeautifulSoup(toot['content'], 'html.parser')
-        txt = soup.text
+        txt = soup.text.replace('&apos;', "'")
         print("{0} (id: {1})".format(txt, toot['id']))
+        print(" -> {0}".format(text_to_emoticon(txt)))
+        print("")
