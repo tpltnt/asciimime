@@ -56,6 +56,8 @@ if __name__ == "__main__":
     PARSER.add_argument('--atoken', type=str, help='access token to use')
     PARSER.add_argument('--register', action='store_true',
                         help='register the app (only run once)')
+    PARSER.add_argument('--nopost', action='store_true',
+                        help="only show results on cli, but don't post them (aka a dry run)")
     ARGS = PARSER.parse_args()
 
     if ARGS.register:
@@ -80,7 +82,9 @@ if __name__ == "__main__":
             continue
         if ':(' != mime_reply:
             tid = toot['id']  # toot id
-            print("{0} (id: {1})".format(txt, tid))
-            print(" -> {0}".format(mime_reply))
-            print("")
-            mastodon.status_post(mime_reply, in_reply_to_id=tid)
+            if ARGS.nopost:
+                print("{0} (id: {1})".format(txt, tid))
+                print(" -> {0}".format(mime_reply))
+                print("")
+            else:
+                mastodon.status_post(mime_reply, in_reply_to_id=tid)
