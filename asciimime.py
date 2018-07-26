@@ -5,6 +5,7 @@ a mime and mirrors the (sentiment of the) toots
 of a user.
 """
 import argparse
+import langdetect
 from bs4 import BeautifulSoup
 from mastodon import Mastodon, MastodonIllegalArgumentError
 from textblob import TextBlob
@@ -74,9 +75,20 @@ if __name__ == "__main__":
                                       scopes=['read', 'write'])
     except MastodonIllegalArgumentError:
         print("given username and/or password are invalid")
+
+    # process all toots
     for toot in mastodon.timeline('home'):
         soup = BeautifulSoup(toot['content'], 'html.parser')
         txt = soup.text.replace('&apos;', "'")
+
+        # only process english toots for now
+        try:
+            if langdetect.detect(txt) != 'en':
+                continue
+        except langdetect.lang_detect_exception.LangDetectException:
+            continue
+
+        # generate response
         mime_reply = text_to_emoticon(txt)
         if not mime_reply:
             continue
